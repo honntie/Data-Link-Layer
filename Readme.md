@@ -3,6 +3,8 @@
 
 ## 问题
 * 重写TMap的TFunc(处理已GC标识的UObject)
+    * 考虑哈希表解决
+* 如果在AnimInstance中AnimUpdate调用FindData则会出现创建空数据库
 
 ## 需求
 * 需要解决TArray复制内存问题(C++的引用符号)
@@ -10,6 +12,9 @@
 * IDataOrigin::IsAllocate处理方式(检测只被蓝图接口追加数据一次)
 * DataAbstract的存放内容
 * 可能还需使用更多寻找的方式(Unity问题, 如果直接存放在AActor则不会有问题)
+
+### 23/12/17
+* 增加创建日志输出到控制台
 
 ### 23/11/25
 * 初步完成测试
