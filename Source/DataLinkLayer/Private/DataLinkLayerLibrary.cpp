@@ -11,7 +11,6 @@ UDataAbstract* UDataLinkLayerLibrary::FindData(UObject* Target, TSubclassOf<UDat
 	
 	// 获取数据
 	static auto FindBPLibraryOrCreate = [](UObject* Target){
-
 		// 查询前清空已经GC的接口对象
 		BPDataLibrary.Remove(nullptr);
 		BPDataLibrary.Shrink();
@@ -20,11 +19,14 @@ UDataAbstract* UDataLinkLayerLibrary::FindData(UObject* Target, TSubclassOf<UDat
 
 		if (const DataLibrary* RefLibrary = BPDataLibrary.Find(Target))
 			Params.ReturnValue = *RefLibrary;    // 使用缓存
+
 		else if (const auto Function = Target->FindFunction(NAME_CreateLibrary))
 		{
 			// 根据接口原理反射调用函数, 但是调用太慢了需要丢进缓存保存
 			Target->ProcessEvent(Function, &Params);
 			BPDataLibrary.Add(Target, Params.ReturnValue);
+
+			UE_LOG(LogTemp, Display, TEXT("Create Data Library(%d): %s"), Params.ReturnValue.Num(), *Target->GetName());
 
 			// 解决Object在蓝图中无法实现构建函数问题
 			for (UDataAbstract* Data : Params.ReturnValue)
